@@ -1,0 +1,522 @@
+fileFormatVersion: 2
+guid: 9628697122e067e41a6cc76d819ccd7d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 725699664394225076
+    second: Character die-Sheet_0
+  - first:
+      213: 8820207433810040051
+    second: Character die-Sheet_1
+  - first:
+      213: -5461704525706068451
+    second: Character die-Sheet_2
+  - first:
+      213: 1748916635038226971
+    second: Character die-Sheet_3
+  - first:
+      213: -5024142222009633631
+    second: Character die-Sheet_4
+  - first:
+      213: 7779830771847669752
+    second: Character die-Sheet_5
+  - first:
+      213: -6881995243763421066
+    second: Character die-Sheet_6
+  - first:
+      213: 2415735610406911262
+    second: Character die-Sheet_7
+  - first:
+      213: -49665515742756464
+    second: Character die-Sheet_8
+  - first:
+      213: 416289617259013516
+    second: Character die-Sheet_9
+  - first:
+      213: 6990322188205829222
+    second: Character die-Sheet_10
+  - first:
+      213: 2400240617285364437
+    second: Character die-Sheet_11
+  - first:
+      213: 5763901626676469652
+    second: Character die-Sheet_12
+  - first:
+      213: 1958627724554161475
+    second: Character die-Sheet_13
+  - first:
+      213: -9137141818395604018
+    second: Character die-Sheet_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Character die-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 4
+        width: 22
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b586d5fff3321a00800000000000000
+      internalID: 725699664394225076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 4
+        width: 21
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f4d189fdeba76a70800000000000000
+      internalID: 8820207433810040051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 4
+        width: 17
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1e7525dba02434b0800000000000000
+      internalID: -5461704525706068451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 4
+        width: 17
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1a9935d966654810800000000000000
+      internalID: 1748916635038226971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 4
+        width: 18
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a4f214a449a64ab0800000000000000
+      internalID: -5024142222009633631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 4
+        width: 17
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f722a02ed287fb60800000000000000
+      internalID: 7779830771847669752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 821
+        y: 1
+        width: 18
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 670bd85c9cd3e70a0800000000000000
+      internalID: -6881995243763421066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 949
+        y: 1
+        width: 20
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1db0911dba668120800000000000000
+      internalID: 2415735610406911262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 1077
+        y: 0
+        width: 20
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09101900a7d8f4ff0800000000000000
+      internalID: -49665515742756464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1205
+        y: 1
+        width: 20
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8528688335f6c500800000000000000
+      internalID: 416289617259013516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 1333
+        y: 1
+        width: 20
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66c2a8d6efc920160800000000000000
+      internalID: 6990322188205829222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 1461
+        y: 1
+        width: 20
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5da22c8df1e5f4120800000000000000
+      internalID: 2400240617285364437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 1589
+        y: 1
+        width: 29
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49fd852bdfd7dff40800000000000000
+      internalID: 5763901626676469652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 1717
+        y: 1
+        width: 44
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34d4849c9817e2b10800000000000000
+      internalID: 1958627724554161475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character die-Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 1845
+        y: 0
+        width: 55
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecbc9244de9523180800000000000000
+      internalID: -9137141818395604018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: eb78a5e0c44c25f4fb859fdcb45aea00
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Character die-Sheet_0: 725699664394225076
+      Character die-Sheet_1: 8820207433810040051
+      Character die-Sheet_10: 6990322188205829222
+      Character die-Sheet_11: 2400240617285364437
+      Character die-Sheet_12: 5763901626676469652
+      Character die-Sheet_13: 1958627724554161475
+      Character die-Sheet_14: -9137141818395604018
+      Character die-Sheet_2: -5461704525706068451
+      Character die-Sheet_3: 1748916635038226971
+      Character die-Sheet_4: -5024142222009633631
+      Character die-Sheet_5: 7779830771847669752
+      Character die-Sheet_6: -6881995243763421066
+      Character die-Sheet_7: 2415735610406911262
+      Character die-Sheet_8: -49665515742756464
+      Character die-Sheet_9: 416289617259013516
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
