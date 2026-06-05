@@ -1,49 +1,88 @@
 using UnityEngine;
+using UnityEngine.UI; // WAJIB: Biar kita bisa ngendaliin komponen UI Image
 using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 100;
-    private int currentHealth;
+    [Header("Sistem Nyawa")]
+    public int maxNyawa = 3;
+    private int nyawaSaatIni;
+
+    [Header("UI Nyawa")]
+    public Image[] arrayHatiUI; // Kotak buat masukin objek Hati_1, Hati_2, Hati_3
+    public Sprite hatiPenuh;    // Sprite pas nyawa utuh
+    public Sprite hatiKosong;   // Sprite pas nyawa hilang
+
+    [Header("Knockback")]
+    public float knockbackForce = 5f;
+    public float knockbackUpward = 3f;
 
     private Animator anim;
     private PlayerController playerCtrl;
     private PlayerMelee playerMelee; 
     
     public bool isDead = false;
-    private bool isInvincible = false; // Bikin player kebal sesaat abis kena hit
+    private bool isInvincible = false; 
 
     void Start()
     {
-        currentHealth = maxHealth;
+        nyawaSaatIni = maxNyawa;
         anim = GetComponent<Animator>();
         playerCtrl = GetComponent<PlayerController>();
         playerMelee = GetComponent<PlayerMelee>();
+        
+        // Panggil fungsi ini pas game mulai biar tampilan hatinya sesuai
+        UpdateUINyawa(); 
     }
 
-    [Header("Knockback")]
-    public float knockbackForce = 5f;
-    public float knockbackUpward = 3f;
-
-    // UBAHAN: Kita minta info "Transform attacker" biar tahu siapa yang mukul
+    // Fungsi ini dipanggil sama Enemy / Projectile
     public void TakeDamage(int damage, Transform attacker)
     {
         if (isDead || isInvincible) return;
 
-        currentHealth -= damage;
+        // KUNCINYA DI SINI: Kita abaikan (int damage) dari musuh. 
+        // Berapapun pukulannya, nyawa Luke cuma ngurang 1.
+        nyawaSaatIni -= 1; 
         
-        if (currentHealth <= 0)
+        UpdateUINyawa(); // Update gambar hati di layar
+
+        // --- TAMBAHAN SCREEN SHAKE KENCANG ---
+        if (ScreenShakeManager.instance != null)
+        {
+            ScreenShakeManager.instance.ShakeCamera(0.5f); // Getaran full (1f) buat peringatan bahaya
+        }
+        
+        if (nyawaSaatIni <= 0)
         {
             Die();
         }
         else
         {
             anim.SetTrigger("Hit"); 
-            
-            // Cari tahu harus kepental ke mana
             float knockbackDir = transform.position.x < attacker.position.x ? -1f : 1f;
-            
             StartCoroutine(InvincibilityFrames(knockbackDir));
+        }
+    }
+
+    void UpdateUINyawa()
+    {
+        // Mesin otomatis buat ngecek satu-satu gambar hati di layar
+        for (int i = 0; i < arrayHatiUI.Length; i++)
+        {
+            // Kalau urutan hatinya masih di bawah jumlah nyawa saat ini, kasih gambar Penuh
+            if (i < nyawaSaatIni)
+            {
+                arrayHatiUI[i].sprite = hatiPenuh; 
+            }
+            // Kalau udah melebihi, kasih gambar Kosong
+            else
+            {
+                arrayHatiUI[i].sprite = hatiKosong; 
+            }
+            
+            // Pengaman: Tampilkan hati sesuai batas maxNyawa
+            if (i < maxNyawa) arrayHatiUI[i].enabled = true;
+            else arrayHatiUI[i].enabled = false;
         }
     }
 
@@ -51,15 +90,12 @@ public class PlayerHealth : MonoBehaviour
     {
         isInvincible = true;
         
-        // Kunci pergerakan dari PlayerController
         if (playerCtrl != null) playerCtrl.canMove = false;
         
-        // KASIH DORONGAN KNOCKBACK KE LUKE
         GetComponent<Rigidbody2D>().linearVelocity = new Vector2(knockbackDir * knockbackForce, knockbackUpward);
         
         yield return new WaitForSeconds(0.3f); 
         
-        // Buka lagi kunci pergerakannya setelah selesai kepental
         if (playerCtrl != null) playerCtrl.canMove = true;
 
         yield return new WaitForSeconds(0.7f); 
@@ -71,25 +107,56 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         anim.SetBool("isDead", true);
 
-     // 1. Kunci semua pergerakan dan serangan
         if (playerCtrl != null) playerCtrl.enabled = false;
         if (playerMelee != null) playerMelee.enabled = false;
 
-        // 2. Stop momentum dan MATIKAN GRAVITASI biar mayat gak tembus ke bawah lantai
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0; 
         
-        // 3. MATIKAN COLLIDER biar musuh bisa lewat nembus mayatnya
         GetComponent<Collider2D>().enabled = false;
 
-        // 4. (OPSIONAL) Bikin mayat Luke ada di "depan" musuh secara visual
-        // Pastikan Luke punya komponen SpriteRenderer ya
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr != null)
         {
-            // Naikin angkanya biar dia digambar paling akhir (paling depan) di layar
             sr.sortingOrder = 10; 
         }
+    }
+
+    // FUNGSI BARU BUAT NAMBAH NYAWA DARI LOOT
+    public bool TambahNyawa(int jumlah)
+    {
+        // Kalau nyawa udah penuh atau player udah mati, itemnya dibiarin aja (nggak diambil)
+        if (nyawaSaatIni >= maxNyawa || isDead) 
+        {
+            return false; 
+        }
+
+        nyawaSaatIni += jumlah;
+        
+        // Pengaman biar nyawa nggak bablas nembus batas maksimal
+        if (nyawaSaatIni > maxNyawa) 
+        {
+            nyawaSaatIni = maxNyawa;
+        }
+        
+        UpdateUINyawa(); // Panggil fungsi update gambar hati UI
+        return true;     // Kasih tau itemnya kalau nyawa berhasil ditambah!
+    }
+
+    // FUNGSI BARU KHUSUS BUAT JURANG KEMATIAN
+    public void MatiInstan()
+    {
+        // Kalau udah mati duluan, nggak usah diulang
+        if (isDead) return; 
+
+        // Kuras habis nyawanya jadi 0
+        nyawaSaatIni = 0;
+        
+        // Panggil fungsi update UI biar semua hatinya langsung kosong
+        UpdateUINyawa(); 
+        
+        // Eksekusi fungsi mati
+        Die(); 
     }
 }

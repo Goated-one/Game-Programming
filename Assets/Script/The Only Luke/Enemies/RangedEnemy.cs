@@ -7,6 +7,11 @@ public class RangedEnemy : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
+    [Header("Loot Drop")]
+    public GameObject itemDarahPrefab;
+    [Range(0f, 100f)]
+    public float peluangDrop = 30f; // 30% kemungkinan musuh ini nge-drop darah
+
     [Header("Movement")]
     public float moveSpeed = 2f;
     public bool movingRight = false;
@@ -264,10 +269,30 @@ public class RangedEnemy : MonoBehaviour
     void Die()
     {
         isDead = true;
-        anim.SetBool("isDead", true);
         
-        if (chargeEffect != null) chargeEffect.SetActive(false);
-        
+        // --- SISTEM SKOR (Khusus Enemy Melee yang udah lu pasang tadi) ---
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.TambahSkor(10);
+        }
+
+        // --- SISTEM LOOT DROP (TAMBAHAN BARU) ---
+        if (itemDarahPrefab != null)
+        {
+            // Bikin sistem gacha/undian dari angka 0 sampai 100
+            float gacha = Random.Range(0f, 100f);
+            
+            // Kalau angka gacha-nya masuk ke persentase peluang kita (misal di bawah 30)
+            if (gacha <= peluangDrop)
+            {
+                // Lempar itemnya ke udara sedikit (Y + 0.5) biar posisinya pas di badan musuh, nggak mendem di tanah
+                Vector2 posisiSpawn = new Vector2(transform.position.x, transform.position.y + 0.5f);
+                Instantiate(itemDarahPrefab, posisiSpawn, Quaternion.identity);
+            }
+        }
+
+        anim.SetBool("IsDead", true); // (Lanjutan kode asli lu) ...
+        // ... (sisanya biarin sama aja)
         GetComponent<Collider2D>().enabled = false;
         rb.gravityScale = 0; 
         rb.linearVelocity = Vector2.zero;

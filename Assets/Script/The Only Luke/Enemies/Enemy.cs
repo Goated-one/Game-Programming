@@ -11,6 +11,11 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
+    [Header("Loot Drop")]
+    public GameObject itemDarahPrefab;
+    [Range(0f, 100f)]
+    public float peluangDrop = 30f; // 30% kemungkinan musuh ini nge-drop darah
+
     [Header("Movement & Jump")]
     public float moveSpeed = 2f;
     public float jumpForce = 6f; 
@@ -105,8 +110,6 @@ public class Enemy : MonoBehaviour
             bool isWall = wallInfo.collider != null;
             bool isTallWall = headInfo.collider != null;
 
-            // CARA BARU YANG LEBIH AKURAT: Cek murni dari kecepatannya (bukan dari panjang laser)
-            // Kalau kecepatan Y (atas/bawah) lebih dari 0.1, artinya dia lagi di udara
             bool lagiDiUdara = Mathf.Abs(rb.linearVelocity.y) > 0.1f;
 
             if (!lagiDiUdara)
@@ -137,7 +140,6 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                // KALAU LAGI DI UDARA, TETEP MAJU AJA, ABAIKAN TEMBOK & JURANG!
                 float velocityX = movingRight ? moveSpeed : -moveSpeed;
                 rb.linearVelocity = new Vector2(velocityX, rb.linearVelocity.y);
                 anim.SetFloat("Speed", Mathf.Abs(velocityX));
@@ -242,6 +244,12 @@ public class Enemy : MonoBehaviour
     {
         if (isDead) return;
         currentHealth -= damage;
+
+         if (ScreenShakeManager.instance != null)
+        {
+            ScreenShakeManager.instance.ShakeCamera(0.5f); // Getaran full (1f) buat peringatan bahaya
+        }
+        
         if (currentHealth <= 0) Die();
         else
         {
@@ -263,7 +271,30 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         isDead = true;
-        anim.SetBool("IsDead", true);
+        
+        // --- SISTEM SKOR (Khusus Enemy Melee yang udah lu pasang tadi) ---
+        if (ScoreManager.instance != null)
+        {
+            ScoreManager.instance.TambahSkor(10);
+        }
+
+        // --- SISTEM LOOT DROP (TAMBAHAN BARU) ---
+        if (itemDarahPrefab != null)
+        {
+            // Bikin sistem gacha/undian dari angka 0 sampai 100
+            float gacha = Random.Range(0f, 100f);
+            
+            // Kalau angka gacha-nya masuk ke persentase peluang kita (misal di bawah 30)
+            if (gacha <= peluangDrop)
+            {
+                // Lempar itemnya ke udara sedikit (Y + 0.5) biar posisinya pas di badan musuh, nggak mendem di tanah
+                Vector2 posisiSpawn = new Vector2(transform.position.x, transform.position.y + 0.5f);
+                Instantiate(itemDarahPrefab, posisiSpawn, Quaternion.identity);
+            }
+        }
+
+        anim.SetBool("IsDead", true); // (Lanjutan kode asli lu) ...
+        // ... (sisanya biarin sama aja)
         GetComponent<Collider2D>().enabled = false;
         rb.gravityScale = 0; 
         rb.linearVelocity = Vector2.zero;
