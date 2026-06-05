@@ -4,17 +4,20 @@ using System.Collections;
 public class Enemy : MonoBehaviour
 {
     [Header("Knockback")]
-    public float knockbackForce = 4f; // Jauhnya pentalan ke belakang
-    public float knockbackUpward = 2f; // Efek sedikit terangkat ke udara
+    public float knockbackForce = 4f; 
+    public float knockbackUpward = 2f; 
     
     [Header("Stats")]
     public int maxHealth = 100;
     private int currentHealth;
 
-    [Header("Movement")]
+    [Header("Movement & Jump")]
     public float moveSpeed = 2f;
+    public float jumpForce = 6f; 
+    public float tinggiTembokBatas = 1f; 
     public bool movingRight = false;
     public Transform edgeCheck; 
+    public LayerMask groundLayer; 
 
     [Header("Attack Settings")]
     public float attackRange = 1.5f; 
@@ -33,7 +36,7 @@ public class Enemy : MonoBehaviour
     private bool isStunned = false; 
     private bool isAttacking = false;
     private Transform playerTransform;
-    private PlayerHealth targetHealth; // <--- TAMBAHIN INI
+    private PlayerHealth targetHealth; 
 
     void Start()
     {
@@ -41,29 +44,22 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
-        // PENGAMAN: Cari Player dengan aman biar gak crash
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
             playerTransform = playerObj.transform;
             targetHealth = playerObj.GetComponent<PlayerHealth>();
         }
-        else
-        {
-            Debug.LogError("WOY! Objek karakter utama lu belum dipasangin Tag 'Player' di Inspector tuh!");
-        }
     }
 
    void Update()
     {
-        // Kalau player gak ketemu (crash), stop semuanya biar gak error
         if (playerTransform == null) return; 
 
         cooldownTimer += Time.deltaTime; 
 
         if (isDead || isStunned || isAttacking)
         {
-            // UBAHAN PENTING: Hanya paksa berhenti (0) kalau lagi GAK STUN dan GAK NYERANG
             if (!isAttacking && !isStunned) 
             {
                 rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -72,17 +68,17 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // --- TAMBAHAN BARU: CEK APAKAH PLAYER UDAH MATI ---
         if (targetHealth != null && targetHealth.isDead)
         {
-            Patrol(); // Kalau Luke mati, musuhnya santai lanjut jalan-jalan
-            return;   // Stop eksekusi kode ke bawah biar dia gak ngejar/nyerang lagi
+            Patrol(); 
+            return;   
         }
         
-        // CARA BARU: Ngukur jarak khusus sumbu X (kiri-kanan) biar lebih akurat buat 2D
-        float distanceToPlayer = Mathf.Abs(transform.position.x - playerTransform.position.x);
+        float distanceX = Mathf.Abs(transform.position.x - playerTransform.position.x);
+        float distanceY = Mathf.Abs(transform.position.y - playerTransform.position.y);
+        bool isSameFloor = distanceY < 3f; 
 
-        if (distanceToPlayer <= attackRange)
+        if (distanceX <= attackRange && isSameFloor)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             anim.SetFloat("Speed", 0);
@@ -94,10 +90,58 @@ public class Enemy : MonoBehaviour
                 AttackPlayer();
             }
         }
-        else if (distanceToPlayer <= aggroRange)
+        else if (distanceX <= aggroRange && isSameFloor)
         {
             FacePlayer();
-            Patrol(); 
+
+            RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f, groundLayer);
+            Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
+            RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.5f, groundLayer);
+            
+            Vector2 posisiKepala = new Vector2(edgeCheck.position.x, edgeCheck.position.y + tinggiTembokBatas);
+            RaycastHit2D headInfo = Physics2D.Raycast(posisiKepala, rayDirection, 0.5f, groundLayer);
+
+            bool isEdge = groundInfo.collider == null;
+            bool isWall = wallInfo.collider != null;
+            bool isTallWall = headInfo.collider != null;
+
+            // CARA BARU YANG LEBIH AKURAT: Cek murni dari kecepatannya (bukan dari panjang laser)
+            // Kalau kecepatan Y (atas/bawah) lebih dari 0.1, artinya dia lagi di udara
+            bool lagiDiUdara = Mathf.Abs(rb.linearVelocity.y) > 0.1f;
+
+            if (!lagiDiUdara)
+            {
+                if (isEdge)
+                {
+                    rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+                    anim.SetFloat("Speed", 0);
+                }
+                else if (isWall)
+                {
+                    if (!isTallWall)
+                    {
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                    }
+                    else
+                    {
+                        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+                        anim.SetFloat("Speed", 0);
+                    }
+                }
+                else
+                {
+                    float velocityX = movingRight ? moveSpeed : -moveSpeed;
+                    rb.linearVelocity = new Vector2(velocityX, rb.linearVelocity.y);
+                    anim.SetFloat("Speed", Mathf.Abs(velocityX));
+                }
+            }
+            else
+            {
+                // KALAU LAGI DI UDARA, TETEP MAJU AJA, ABAIKAN TEMBOK & JURANG!
+                float velocityX = movingRight ? moveSpeed : -moveSpeed;
+                rb.linearVelocity = new Vector2(velocityX, rb.linearVelocity.y);
+                anim.SetFloat("Speed", Mathf.Abs(velocityX));
+            }
         }
         else
         {
@@ -110,10 +154,12 @@ public class Enemy : MonoBehaviour
         if (playerTransform.position.x > transform.position.x && !movingRight)
         {
             movingRight = true;
+            transform.localRotation = Quaternion.Euler(0, 180, 0); 
         }
         else if (playerTransform.position.x < transform.position.x && movingRight)
         {
             movingRight = false;
+            transform.localRotation = Quaternion.Euler(0, 0, 0); 
         }
     }
 
@@ -127,36 +173,24 @@ public class Enemy : MonoBehaviour
     IEnumerator AttackLunge()
     {
         isAttacking = true;
-
         float direction = movingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(direction * lungeSpeed, rb.linearVelocity.y);
-
         yield return new WaitForSeconds(lungeTime);
-
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
         yield return new WaitForSeconds(0.5f);
-
         isAttacking = false; 
     }
 
-    // --- POSISI DEAL DAMAGE UDAH DIBENERIN JADI DI TENGAH BADAN ---
     public void DealDamage()
     {
         Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
-        
-        // Sekarang pakai transform.position (titik tengah), BUKAN edgeCheck
         RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, attackRange, playerLayer);
         
-        // Garis merah buat ngebantu lu nge-debug di scene
-        Debug.DrawRay(transform.position, rayDirection * attackRange, Color.red, 1f);
-
         if (hit.collider != null)
         {
             PlayerHealth playerHealth = hit.collider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                // TAMBAHKAN "transform" DI SINI BIAR PLAYER TAHU DIA DIPUKUL SAMA SIAPA
                 playerHealth.TakeDamage(attackDamage, transform);
             }
         }
@@ -171,18 +205,36 @@ public class Enemy : MonoBehaviour
         if (movingRight) transform.localRotation = Quaternion.Euler(0, 180, 0); 
         else transform.localRotation = Quaternion.Euler(0, 0, 0); 
 
-        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f);
+        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f, groundLayer);
         Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f);
+        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.5f, groundLayer);
+        
+        Vector2 posisiKepala = new Vector2(edgeCheck.position.x, edgeCheck.position.y + tinggiTembokBatas);
+        RaycastHit2D headInfo = Physics2D.Raycast(posisiKepala, rayDirection, 0.5f, groundLayer);
 
         bool isEdge = groundInfo.collider == null; 
+        bool isWall = wallInfo.collider != null;
+        bool isTallWall = headInfo.collider != null;
         
-        // CARA BARU: Cek tembok, TAPI abaikan objek yang punya Tag Player
-        bool isWall = wallInfo.collider != null && wallInfo.collider.gameObject != gameObject && !wallInfo.collider.CompareTag("Player");
+        bool lagiDiUdara = Mathf.Abs(rb.linearVelocity.y) > 0.1f;
 
-        if (isEdge || isWall)
+        if (!lagiDiUdara)
         {
-            movingRight = !movingRight; 
+            if (isEdge)
+            {
+                movingRight = !movingRight; 
+            }
+            else if (isWall)
+            {
+                if (!isTallWall)
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                }
+                else
+                {
+                    movingRight = !movingRight;
+                }
+            }
         }
     }
 
@@ -194,11 +246,7 @@ public class Enemy : MonoBehaviour
         else
         {
             anim.SetTrigger("Hit");
-            
-            // Logika arah pantulan: Kalau musuh di kiri Player, pentalin ke kiri (-1). Kalau di kanan, ke kanan (1).
             float knockbackDir = transform.position.x < playerTransform.position.x ? -1f : 1f;
-            
-            // Kirim arahnya ke Coroutine Stun
             StartCoroutine(HitStun(knockbackDir));
         }
     }
@@ -207,12 +255,8 @@ public class Enemy : MonoBehaviour
     {
         isStunned = true;
         isAttacking = false; 
-        
-        // KASIH DORONGAN KNOCKBACK!
         rb.linearVelocity = new Vector2(knockbackDir * knockbackForce, knockbackUpward);
-        
         yield return new WaitForSeconds(0.5f); 
-        
         isStunned = false;
     }
 
