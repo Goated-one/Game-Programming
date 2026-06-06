@@ -121,6 +121,9 @@ public class PlayerHealth : MonoBehaviour
         {
             sr.sortingOrder = 10; 
         }
+
+        // --- TAMBAHAN BARU: PANGGIL PROSES GAME OVER ---
+        StartCoroutine(TungguLaluGameOver());
     }
 
     // FUNGSI BARU BUAT NAMBAH NYAWA DARI LOOT
@@ -158,5 +161,17 @@ public class PlayerHealth : MonoBehaviour
         
         // Eksekusi fungsi mati
         Die(); 
+    }
+
+    IEnumerator TungguLaluGameOver()
+    {
+        // Tunggu 2 detik biar Luke bisa beres nge-play animasi matinya
+        yield return new WaitForSeconds(2f);
+        
+        // Panggil panel game over-nya
+        if (GameOverManager.instance != null)
+        {
+            GameOverManager.instance.MunculkanGameOver();
+        }
     }
 }
