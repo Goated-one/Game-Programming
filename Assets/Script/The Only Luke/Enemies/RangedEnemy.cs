@@ -132,9 +132,13 @@ public class RangedEnemy : MonoBehaviour
         else transform.localRotation = Quaternion.Euler(0, 0, 0); 
 
         // DETEKSI YANG UDAH DIPERBAIKI PAKE groundLayer
+       // Deteksi jurang tetep dari kaki (edgeCheck)
         RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f, groundLayer);
         Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f, groundLayer);
+        
+        // --- PERBAIKAN ---
+        // Tembak laser tembok dari perut (transform.position) dan panjangin jadi 1f
+        RaycastHit2D wallInfo = Physics2D.Raycast(transform.position, rayDirection, 1f, groundLayer);
         
         bool isEdge = groundInfo.collider == null; 
         bool isWall = wallInfo.collider != null;

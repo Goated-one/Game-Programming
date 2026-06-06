@@ -92,12 +92,17 @@ public class Enemy : MonoBehaviour
         {
             FacePlayer();
 
+            // Deteksi jurang tetep dari telapak kaki (edgeCheck)
             RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f, groundLayer);
             Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
-            RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.5f, groundLayer);
             
-            Vector2 posisiKepala = new Vector2(edgeCheck.position.x, edgeCheck.position.y + tinggiTembokBatas);
-            RaycastHit2D headInfo = Physics2D.Raycast(posisiKepala, rayDirection, 0.5f, groundLayer);
+            // --- PERBAIKAN ---
+            // Tembak laser tembok dari titik tengah badan (transform.position) dan panjangin jadi 1f
+            RaycastHit2D wallInfo = Physics2D.Raycast(transform.position, rayDirection, 1f, groundLayer);
+            
+            // Tembak laser kepala dari atas badan (bukan dari kaki)
+            Vector2 posisiKepala = new Vector2(transform.position.x, transform.position.y + tinggiTembokBatas);
+            RaycastHit2D headInfo = Physics2D.Raycast(posisiKepala, rayDirection, 1f, groundLayer);
 
             bool isEdge = groundInfo.collider == null;
             bool isWall = wallInfo.collider != null;
