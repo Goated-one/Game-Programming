@@ -16,8 +16,9 @@ public class RangedEnemy : MonoBehaviour
     public float moveSpeed = 2f;
     public bool movingRight = false;
     public Transform edgeCheck;
+    public LayerMask groundLayer; // KUNCI ANTI GETER: Deteksi khusus buat lantai
 
-    [Header("AI Ranges (Atur di Inspector)")]
+    [Header("AI Ranges")]
     public float fleeRange = 3f;      
     public float attackRange = 6f;    
     public float aggroRange = 9f;     
@@ -88,10 +89,8 @@ public class RangedEnemy : MonoBehaviour
 
         float distanceToPlayer = Mathf.Abs(transform.position.x - playerTransform.position.x);
         
-        // --- LOGIKA AI TERBARU ---
         if (distanceToPlayer <= fleeRange)
         {
-            // Coba kabur. Kalau fungsi Flee() menghasilkan 'true' (berarti mentok), dia bakal nembak!
             bool isCornered = Flee();
             if (isCornered)
             {
@@ -100,7 +99,6 @@ public class RangedEnemy : MonoBehaviour
         }
         else if (distanceToPlayer <= attackRange)
         {
-            // Jarak ideal buat nembak
             PrepareToShoot();
         }
         else if (distanceToPlayer <= aggroRange)
@@ -113,7 +111,6 @@ public class RangedEnemy : MonoBehaviour
         }
     }
 
-    // FUNGSI BARU: Biar kode nembak rapi dan gak diulang-ulang
     void PrepareToShoot()
     {
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -126,32 +123,27 @@ public class RangedEnemy : MonoBehaviour
         }
     }
 
-    // FUNGSI Flee SEKARANG MENGHASILKAN NILAI BOOL (TRUE/FALSE)
     bool Flee()
     {
-        // Tentukan arah kabur (menjauh dari player)
         bool shouldRunRight = transform.position.x > playerTransform.position.x;
         
-        // Putar badan ke arah kabur
         movingRight = shouldRunRight;
         if (movingRight) transform.localRotation = Quaternion.Euler(0, 180, 0); 
         else transform.localRotation = Quaternion.Euler(0, 0, 0); 
 
-        // Cek pakai sensor apakah di arah lari ada jurang atau tembok
-        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f);
+        // DETEKSI YANG UDAH DIPERBAIKI PAKE groundLayer
+        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f, groundLayer);
         Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f);
+        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f, groundLayer);
         
         bool isEdge = groundInfo.collider == null; 
-        bool isWall = wallInfo.collider != null && wallInfo.collider.gameObject != gameObject && !wallInfo.collider.CompareTag("Player");
+        bool isWall = wallInfo.collider != null;
 
-        // Kalau mentok, kasih tau Update() dengan nge-return TRUE biar dia nembak
         if (isEdge || isWall)
         {
             return true; 
         }
 
-        // Kalau jalanan masih aman, lari menjauh dan kasih tau Update() dengan nge-return FALSE
         float velocityX = movingRight ? moveSpeed : -moveSpeed;
         rb.linearVelocity = new Vector2(velocityX, rb.linearVelocity.y);
         anim.SetFloat("Speed", Mathf.Abs(velocityX));
@@ -163,12 +155,13 @@ public class RangedEnemy : MonoBehaviour
     {
         FacePlayer();
         
-        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f);
+        // DETEKSI YANG UDAH DIPERBAIKI PAKE groundLayer
+        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f, groundLayer);
         Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f);
+        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f, groundLayer);
         
         bool isEdge = groundInfo.collider == null; 
-        bool isWall = wallInfo.collider != null && wallInfo.collider.gameObject != gameObject && !wallInfo.collider.CompareTag("Player");
+        bool isWall = wallInfo.collider != null;
 
         if (isEdge || isWall)
         {
@@ -204,6 +197,9 @@ public class RangedEnemy : MonoBehaviour
 
         anim.SetTrigger("Attack"); 
         
+        // Tambahan Audio Nembak
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Suara Enemy");
+
         if (chargeEffect != null) chargeEffect.SetActive(true); 
 
         yield return new WaitForSeconds(chargeTime);
@@ -226,12 +222,13 @@ public class RangedEnemy : MonoBehaviour
         if (movingRight) transform.localRotation = Quaternion.Euler(0, 180, 0); 
         else transform.localRotation = Quaternion.Euler(0, 0, 0); 
 
-        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f);
+        // DETEKSI YANG UDAH DIPERBAIKI PAKE groundLayer
+        RaycastHit2D groundInfo = Physics2D.Raycast(edgeCheck.position, Vector2.down, 1f, groundLayer);
         Vector2 rayDirection = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f);
+        RaycastHit2D wallInfo = Physics2D.Raycast(edgeCheck.position, rayDirection, 0.2f, groundLayer);
 
         bool isEdge = groundInfo.collider == null; 
-        bool isWall = wallInfo.collider != null && wallInfo.collider.gameObject != gameObject && !wallInfo.collider.CompareTag("Player");
+        bool isWall = wallInfo.collider != null;
 
         if (isEdge || isWall)
         {
@@ -243,6 +240,11 @@ public class RangedEnemy : MonoBehaviour
     {
         if (isDead) return;
         currentHealth -= damage;
+
+        // Samain persis kayak enemy Melee: ada layar geter dan suara kena pukul
+        if (ScreenShakeManager.instance != null) ScreenShakeManager.instance.ShakeCamera(0.5f); 
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Hit Enemy");
+
         if (currentHealth <= 0) Die();
         else
         {
@@ -269,30 +271,28 @@ public class RangedEnemy : MonoBehaviour
     void Die()
     {
         isDead = true;
+
+        // Tambahan Audio Mati
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Suara Enemy");
         
-        // --- SISTEM SKOR (Khusus Enemy Melee yang udah lu pasang tadi) ---
+        // Sistem Skor
         if (ScoreManager.instance != null)
         {
             ScoreManager.instance.TambahSkor(10);
         }
 
-        // --- SISTEM LOOT DROP (TAMBAHAN BARU) ---
+        // Sistem Loot Drop (Gacha Item Darah)
         if (itemDarahPrefab != null)
         {
-            // Bikin sistem gacha/undian dari angka 0 sampai 100
             float gacha = Random.Range(0f, 100f);
-            
-            // Kalau angka gacha-nya masuk ke persentase peluang kita (misal di bawah 30)
             if (gacha <= peluangDrop)
             {
-                // Lempar itemnya ke udara sedikit (Y + 0.5) biar posisinya pas di badan musuh, nggak mendem di tanah
                 Vector2 posisiSpawn = new Vector2(transform.position.x, transform.position.y + 0.5f);
                 Instantiate(itemDarahPrefab, posisiSpawn, Quaternion.identity);
             }
         }
 
-        anim.SetBool("IsDead", true); // (Lanjutan kode asli lu) ...
-        // ... (sisanya biarin sama aja)
+        anim.SetBool("IsDead", true); 
         GetComponent<Collider2D>().enabled = false;
         rb.gravityScale = 0; 
         rb.linearVelocity = Vector2.zero;
