@@ -1,23 +1,21 @@
 using UnityEngine;
-using System.Collections; // WAJIB DITAMBAHIN BUAT BIKIN TIMER COROUTINE
+using System.Collections; 
+using UnityEngine.EventSystems;
 
 public class PlayerMelee : MonoBehaviour
 {
-    public float dropForce = 15f;      // Kecepatan meluncur ke bawah saat Drop Attack
-    public GameObject meleeHitbox;     // Drag objek MeleeHitbox ke sini
-    public GameObject dropHitbox;      // Drag objek DropHitbox ke sini
-    
-    // Waktu jeda (stun) setelah mendarat dari drop attack
+    public float dropForce = 15f;      
+    public GameObject meleeHitbox;     
+    public GameObject dropHitbox;      
     public float recoveryTime = 0.5f;
 
     private Rigidbody2D rb;
     private Animator anim;
-    private PlayerController playerCtrl; // Buat ngecek isGrounded
+    private PlayerController playerCtrl; 
     
-    public Animator meleeSlashAnim; // Drag objek MeleeHitbox ke sini nanti
-    public Animator dropSlashAnim;  // Drag objek DropHitbox ke sini nanti
+    public Animator meleeSlashAnim; 
+    public Animator dropSlashAnim;  
 
-    // Gembok biar drop attack nggak bisa di-spam
     private bool hasDropAttacked = false; 
 
     void Start()
@@ -29,60 +27,49 @@ public class PlayerMelee : MonoBehaviour
 
     void Update()
     {
-        // 1. Cek momen pas mendarat HANYA SETELAH melakukan drop attack
+        // SATPAM UI & PAUSE
+        if (PauseMenuManager.GameIsPaused || EventSystem.current.IsPointerOverGameObject()) return;
+
         if (playerCtrl.isGrounded && hasDropAttacked)
         {
-            hasDropAttacked = false; // Langsung reset biar gk panggil timer berkali-kali
-            StartCoroutine(DropAttackRecovery()); // Jalankan timer jeda
+            hasDropAttacked = false; 
+            StartCoroutine(DropAttackRecovery()); 
         }
 
-        // 2. Cek input melee (Klik Kanan atau K) + Cek canMove biar gk bisa mukul pas lg stun
         if ((Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.K)) && playerCtrl.canMove)
         {
             if (playerCtrl.isGrounded)
             {
-                // Kalau lagi di tanah -> Serangan Biasa
+                // --- TAMBAHAN AUDIO ---
+                if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Melee");
+
                 anim.SetTrigger("Melee");
             }
-            else if (!hasDropAttacked) // Cek apakah gembok drop attack masih kebuka
+            else if (!hasDropAttacked) 
             {
-                hasDropAttacked = true; // Langsung kunci gemboknya
+                hasDropAttacked = true; 
                 
-                // Kalau lagi di udara -> Drop Attack
+                // --- TAMBAHAN AUDIO ---
+                if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Drop Attack");
+
                 anim.SetTrigger("DropAttack");
-                
-                // Paksa karakter langsung meluncur cepat ke bawah
                 rb.linearVelocity = new Vector2(0, -dropForce);
             }
         }
     }
 
-    // --- FUNGSI COROUTINE BUAT JEDA RECOVERY ---
     IEnumerator DropAttackRecovery()
     {
-        // Kunci pergerakan (player gk bisa jalan/lompat)
         playerCtrl.canMove = false; 
-        
-        // Pastikan karakternya beneran ngerem berhenti pas nabrak tanah
         rb.linearVelocity = Vector2.zero; 
-
-        // Tunggu selama waktu recovery (0.5 detik)
         yield return new WaitForSeconds(recoveryTime); 
-
-        // Buka gemboknya lagi, player bisa main normal
         playerCtrl.canMove = true; 
     }
-
-    // --- FUNGSI-FUNGSI INI DIPANGGIL LEWAT ANIMATION EVENT ---
 
     public void EnableMeleeHitbox()
     {
         meleeHitbox.SetActive(true);
-        // Mainkan animasi slash dari frame 0
-        if (meleeSlashAnim != null) 
-        {
-            meleeSlashAnim.Play("Slash_Anim", -1, 0f); 
-        }
+        if (meleeSlashAnim != null) meleeSlashAnim.Play("Slash_Anim", -1, 0f); 
     }
 
     public void DisableMeleeHitbox()
@@ -93,11 +80,7 @@ public class PlayerMelee : MonoBehaviour
     public void EnableDropHitbox()
     {
         dropHitbox.SetActive(true);
-        // Mainkan animasi drop slash dari frame 0
-        if (dropSlashAnim != null) 
-        {
-            dropSlashAnim.Play("DropSlash_Anim", -1, 0f); 
-        }
+        if (dropSlashAnim != null) dropSlashAnim.Play("DropSlash_Anim", -1, 0f); 
     }
 
     public void DisableDropHitbox()

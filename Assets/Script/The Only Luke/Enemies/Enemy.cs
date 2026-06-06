@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     [Header("Loot Drop")]
     public GameObject itemDarahPrefab;
     [Range(0f, 100f)]
-    public float peluangDrop = 30f; // 30% kemungkinan musuh ini nge-drop darah
+    public float peluangDrop = 30f; 
 
     [Header("Movement & Jump")]
     public float moveSpeed = 2f;
@@ -65,10 +65,7 @@ public class Enemy : MonoBehaviour
 
         if (isDead || isStunned || isAttacking)
         {
-            if (!isAttacking && !isStunned) 
-            {
-                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-            }
+            if (!isAttacking && !isStunned) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             anim.SetFloat("Speed", 0);
             return;
         }
@@ -87,13 +84,9 @@ public class Enemy : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             anim.SetFloat("Speed", 0);
-
             FacePlayer(); 
 
-            if (cooldownTimer >= attackCooldown)
-            {
-                AttackPlayer();
-            }
+            if (cooldownTimer >= attackCooldown) AttackPlayer();
         }
         else if (distanceX <= aggroRange && isSameFloor)
         {
@@ -121,10 +114,7 @@ public class Enemy : MonoBehaviour
                 }
                 else if (isWall)
                 {
-                    if (!isTallWall)
-                    {
-                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                    }
+                    if (!isTallWall) rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                     else
                     {
                         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -169,6 +159,10 @@ public class Enemy : MonoBehaviour
     {
         cooldownTimer = 0f; 
         anim.SetTrigger("Attack"); 
+        
+        // --- TAMBAHAN AUDIO ---
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Suara Enemy");
+
         StartCoroutine(AttackLunge());
     }
 
@@ -191,10 +185,7 @@ public class Enemy : MonoBehaviour
         if (hit.collider != null)
         {
             PlayerHealth playerHealth = hit.collider.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(attackDamage, transform);
-            }
+            if (playerHealth != null) playerHealth.TakeDamage(attackDamage, transform);
         }
     }
 
@@ -222,20 +213,11 @@ public class Enemy : MonoBehaviour
 
         if (!lagiDiUdara)
         {
-            if (isEdge)
-            {
-                movingRight = !movingRight; 
-            }
+            if (isEdge) movingRight = !movingRight; 
             else if (isWall)
             {
-                if (!isTallWall)
-                {
-                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                }
-                else
-                {
-                    movingRight = !movingRight;
-                }
+                if (!isTallWall) rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                else movingRight = !movingRight;
             }
         }
     }
@@ -245,11 +227,11 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
         currentHealth -= damage;
 
-         if (ScreenShakeManager.instance != null)
-        {
-            ScreenShakeManager.instance.ShakeCamera(0.5f); // Getaran full (1f) buat peringatan bahaya
-        }
+         if (ScreenShakeManager.instance != null) ScreenShakeManager.instance.ShakeCamera(0.5f); 
         
+        // --- TAMBAHAN AUDIO ---
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Hit Enemy");
+
         if (currentHealth <= 0) Die();
         else
         {
@@ -272,29 +254,22 @@ public class Enemy : MonoBehaviour
     {
         isDead = true;
         
-        // --- SISTEM SKOR (Khusus Enemy Melee yang udah lu pasang tadi) ---
-        if (ScoreManager.instance != null)
-        {
-            ScoreManager.instance.TambahSkor(10);
-        }
+        // --- TAMBAHAN AUDIO ---
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Suara Enemy"); // Pas mati juga keluarin suaranya
 
-        // --- SISTEM LOOT DROP (TAMBAHAN BARU) ---
+        if (ScoreManager.instance != null) ScoreManager.instance.TambahSkor(10);
+
         if (itemDarahPrefab != null)
         {
-            // Bikin sistem gacha/undian dari angka 0 sampai 100
             float gacha = Random.Range(0f, 100f);
-            
-            // Kalau angka gacha-nya masuk ke persentase peluang kita (misal di bawah 30)
             if (gacha <= peluangDrop)
             {
-                // Lempar itemnya ke udara sedikit (Y + 0.5) biar posisinya pas di badan musuh, nggak mendem di tanah
                 Vector2 posisiSpawn = new Vector2(transform.position.x, transform.position.y + 0.5f);
                 Instantiate(itemDarahPrefab, posisiSpawn, Quaternion.identity);
             }
         }
 
-        anim.SetBool("IsDead", true); // (Lanjutan kode asli lu) ...
-        // ... (sisanya biarin sama aja)
+        anim.SetBool("IsDead", true); 
         GetComponent<Collider2D>().enabled = false;
         rb.gravityScale = 0; 
         rb.linearVelocity = Vector2.zero;
