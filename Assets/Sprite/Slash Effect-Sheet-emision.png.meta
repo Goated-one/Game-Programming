@@ -1,25 +1,25 @@
 fileFormatVersion: 2
-guid: da8af470f1f74ad40857af557d814e6e
+guid: 67d6af8e2f3018b47bbc6f48df681c41
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3910245385220389053
-    second: Slash Effect-Sheet-export_0
+      213: -4228919785298308856
+    second: Slash Effect-Sheet-emision_0
   - first:
-      213: -8429456261263441295
-    second: Slash Effect-Sheet-export_1
+      213: -8009250300681465664
+    second: Slash Effect-Sheet-emision_1
   - first:
-      213: 6903399241167516929
-    second: Slash Effect-Sheet-export_2
+      213: 5938717997189213666
+    second: Slash Effect-Sheet-emision_2
   - first:
-      213: -5405163133013150485
-    second: Slash Effect-Sheet-export_3
+      213: 5829227154185750037
+    second: Slash Effect-Sheet-emision_3
   - first:
-      213: -7308599970337370071
-    second: Slash Effect-Sheet-export_4
+      213: 5719114590961753705
+    second: Slash Effect-Sheet-emision_4
   - first:
-      213: -2883880651944410032
-    second: Slash Effect-Sheet-export_5
+      213: 6148452173594100650
+    second: Slash Effect-Sheet-emision_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,7 +52,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -66,7 +66,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -90,7 +90,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -128,133 +128,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Slash Effect-Sheet-export_0
+      name: Slash Effect-Sheet-emision_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 64
+        x: 27
+        y: 50
+        width: 24
+        height: 10
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: db8fba2e57bf34630800000000000000
-      internalID: 3910245385220389053
+      spriteID: 8015cad6cdbdf45c0800000000000000
+      internalID: -4228919785298308856
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slash Effect-Sheet-export_1
+      name: Slash Effect-Sheet-emision_1
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 64
-        height: 64
+        x: 91
+        y: 21
+        width: 31
+        height: 41
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 17243b9013e840b80800000000000000
-      internalID: -8429456261263441295
+      spriteID: 0c0d0be494d69d090800000000000000
+      internalID: -8009250300681465664
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slash Effect-Sheet-export_2
+      name: Slash Effect-Sheet-emision_2
       rect:
         serializedVersion: 2
-        x: 128
-        y: 0
-        width: 64
-        height: 64
+        x: 141
+        y: 7
+        width: 47
+        height: 54
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 105bd78b80dcdcf50800000000000000
-      internalID: 6903399241167516929
+      spriteID: 2edaea3cd809a6250800000000000000
+      internalID: 5938717997189213666
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slash Effect-Sheet-export_3
+      name: Slash Effect-Sheet-emision_3
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
+        x: 195
+        y: 6
+        width: 28
+        height: 13
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: be4b6bfa4c00df4b0800000000000000
-      internalID: -5405163133013150485
+      spriteID: 5168d40563395e050800000000000000
+      internalID: 5829227154185750037
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slash Effect-Sheet-export_4
+      name: Slash Effect-Sheet-emision_4
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
-        width: 64
-        height: 64
+        x: 258
+        y: 12
+        width: 11
+        height: 14
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9205c92bc03a29a90800000000000000
-      internalID: -7308599970337370071
+      spriteID: 96e57085b606e5f40800000000000000
+      internalID: 5719114590961753705
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slash Effect-Sheet-export_5
+      name: Slash Effect-Sheet-emision_5
       rect:
         serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
+        x: 329
+        y: 9
+        width: 16
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0544b3693d56af7d0800000000000000
-      internalID: -2883880651944410032
+      spriteID: aa30e8d0da0b35550800000000000000
+      internalID: 6148452173594100650
       vertices: []
       indices: 
       edges: []
@@ -263,26 +263,22 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 92b379a4b9602864fa986d5f09221833
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
-    secondaryTextures:
-    - texture: {fileID: 2800000, guid: 67d6af8e2f3018b47bbc6f48df681c41, type: 3}
-      name: emision texture
+    secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      Slash Effect-Sheet-export_0: 3910245385220389053
-      Slash Effect-Sheet-export_1: -8429456261263441295
-      Slash Effect-Sheet-export_2: 6903399241167516929
-      Slash Effect-Sheet-export_3: -5405163133013150485
-      Slash Effect-Sheet-export_4: -7308599970337370071
-      Slash Effect-Sheet-export_5: -2883880651944410032
+      Slash Effect-Sheet-emision_0: -4228919785298308856
+      Slash Effect-Sheet-emision_1: -8009250300681465664
+      Slash Effect-Sheet-emision_2: 5938717997189213666
+      Slash Effect-Sheet-emision_3: 5829227154185750037
+      Slash Effect-Sheet-emision_4: 5719114590961753705
+      Slash Effect-Sheet-emision_5: 6148452173594100650
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
