@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/The Only Luke/MainMenu.unity
+    guid: 1a4357f552ef33e45b5f48fbef267ac2
+  - enabled: 1
+    path: Assets/Scenes/The Only Luke/Level_1 Benerin.unity
+    guid: 88d17b2ef0f959a4aa6ec4b89b12c1c6
+  - enabled: 1
     path: Assets/Scenes/P11_CharMotion.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
